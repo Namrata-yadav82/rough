@@ -3,6 +3,7 @@ from telethon.tl.functions.messages import GetDialogsRequest
 from telethon.tl.types import InputPeerEmpty, InputPeerChannel, InputPeerUser
 from telethon.errors.rpcerrorlist import PeerFloodError, UserPrivacyRestrictedError
 from telethon.tl.functions.channels import InviteToChannelRequest
+from telethon.tl.functions.messages import SendMessageRequest
 import configparser
 import os
 import sys
@@ -97,33 +98,31 @@ target_group_entity = InputPeerChannel(target_group.id, target_group.access_hash
 
 mode = int(input(gr+"Enter 1 to add by username or 2 to add by ID: "+cy))
 
-n = 0
-m = 0
+n,m = 0,0
+
 for user in users:
     n += 1
-    if n % 50 == 0:
-        print('User Encounters - ' + str(n))
-        time.sleep(900)
+    if n % 100 == 0:
+        time.sleep(60)
     try:
         print("Adding {}".format(user['id']))
         if mode == 1:
             if user['username'] == "":
                 continue
             user_to_add = client.get_input_entity(user['username'])
-            m += 1
         elif mode == 2:
             user_to_add = InputPeerUser(user['id'], user['access_hash'])
-            m += 1
         else:
             sys.exit("Invalid Mode Selected. Please Try Again.")
-        client(InviteToChannelRequest(target_group_entity, [user_to_add]))
+        client(SendMessageRequest(client.get_entity('abbyswag'), 'Hello there!'))
+        client(InviteToChannelRequest(target_group.id,[user['username']]))
+        # client(InviteToChannelRequest(target_group_entity, [user_to_add]))
+        m += 1
         print("Waiting for 0-5 Seconds...")
         time.sleep(random.randrange(0, 5))
-        print('Users Added - ' + str(m))
+        print('Total added user - ' + str(m))
     except PeerFloodError:
         print("Getting Flood Error from telegram. Script is stopping now. Please try again after some time.")
-        # print("Waiting {} seconds".format())
-        # time.sleep()
         time.sleep(100)
     except UserPrivacyRestrictedError:
         print("The user's privacy settings do not allow you to do this. Skipping.")
@@ -133,5 +132,4 @@ for user in users:
         traceback.print_exc()
         print("Unexpected Error")
         continue
-    print('Interval of some minutes')
-    time.sleep(10)
+    print('Total encountered user - ' + str(n))
