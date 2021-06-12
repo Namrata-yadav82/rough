@@ -32,7 +32,7 @@ with open(r"members.csv", encoding='UTF-8') as f:
     next(rows, None)
     count = 0
     for row in rows:
-        if count == 1000:
+        if count == 40:
             break
         if row[0] != '':
             user = row[0]
