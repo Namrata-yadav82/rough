@@ -3,7 +3,6 @@ from telethon.tl.functions.messages import GetDialogsRequest
 from telethon.tl.types import InputPeerEmpty, InputPeerChannel, InputPeerUser
 from telethon.errors.rpcerrorlist import PeerFloodError, UserPrivacyRestrictedError
 from telethon.tl.functions.channels import InviteToChannelRequest
-from telethon.tl.functions.messages import SendMessageRequest
 import configparser
 import os
 import sys
@@ -41,7 +40,6 @@ try:
     client = TelegramClient(phone, api_id, api_hash)
 except KeyError:
     os.system('clear')
-    # banner()
     print(re+"[!] run python setup.py first !!\n")
     sys.exit(1)
 
@@ -114,9 +112,7 @@ for user in users:
             user_to_add = InputPeerUser(user['id'], user['access_hash'])
         else:
             sys.exit("Invalid Mode Selected. Please Try Again.")
-        # client(SendMessageRequest(client.get_entity('abbyswag'), 'Hello there!'))
         client(InviteToChannelRequest(target_group.id,[user['username']]))
-        # client(InviteToChannelRequest(target_group_entity, [user_to_add]))
         m += 1
         print("Waiting for 0-5 Seconds...")
         time.sleep(random.randrange(0, 5))
